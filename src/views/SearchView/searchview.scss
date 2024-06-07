@@ -1,0 +1,43 @@
+
+.welcome {
+    
+    h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #37474F; // Darker color for the header
+      }
+      
+      p {
+        width: 70%;
+        font-size: 1.125rem;
+        color: #607D8B; // Lighter color for the text
+      }
+
+      .wave-hand {
+        font-size: 2rem;
+        margin-left: 0.5rem;
+        animation: wave-animation 2s infinite;
+        margin-bottom: 10px;
+      }
+      
+      @keyframes wave-animation {
+        0% { transform: rotate(0deg); }
+        10% { transform: rotate(14deg); }
+        20% { transform: rotate(-8deg); }
+        30% { transform: rotate(14deg); }
+        40% { transform: rotate(-4deg); }
+        50% { transform: rotate(10deg); }
+        60% { transform: rotate(0deg); }
+        100% { transform: rotate(0deg); }
+      }
+}
+
+.searchview {
+  .v-card .v-card-title {
+    line-height: 1.6;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+}
+}
+
