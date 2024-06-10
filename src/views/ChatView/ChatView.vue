@@ -4,29 +4,44 @@ import SearchInput from '../../components/SearchInput/SearchInputView.vue'
 import FormSearchVideo from '@/components/FormSearchVideo/FormSearchVideo.vue'
 import FormSearchAudio from '@/components/FormSearchAudio/FormSearchAudio.vue';
 import FormSearch from '@/components/FormSearch/FormSearch.vue'
-import SearchRequestView from '@/components/SearchRequest/SearchRequestView.vue'
-import ResultChatView from '@/components/ResultChat/ResultChatView.vue'
 import NoteView from '@/components/Note/NoteView.vue'
+import ConversationView from '@/components/Conversation/ConversationView.vue'
+import { watchEffect } from 'vue';
+import { useSearchStore } from '@/stores/search';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 // import { useShowStore } from '@/stores/show';
 
 // khai báo biến 
-// const show = useShowStore();
+const route = useRoute()
+const useSearch = useSearchStore()
+
+// khai báo function vuejs 
+watchEffect(async () => {
+  await useSearch.GetChatDetail(route.params.id)
+  
+})
+onBeforeRouteUpdate(async (to, from, next) => {
+  // fetchChatDetail(to.params.id);
+  await useSearch.GetChatDetail(to.params.id)
+  next()
+})
 </script>
 
 <template>
     <v-app class="chatview">
         <v-container>
-            <v-row justify="center" style="height: 68vh; overflow-y: auto;">
-                <SearchRequestView />
-                <ResultChatView />
+            <v-row style="height: 68vh; overflow-y: auto;">
+                <v-col cols="12">
+                    <ConversationView v-for="chat in useSearch?.chatDetail" :key="chat?.id" :chat="chat"/>
+                </v-col>
             </v-row>
 
             <SearchInput />
             <FormSearchVideo />
             <FormSearchAudio />
-            <FormSearch />
+            <FormSearch :chatid="route.params.id"/>
         </v-container>
-        <NoteView/>
+        <NoteView :chatid="route.params.id"/>
     </v-app>
 </template>
 

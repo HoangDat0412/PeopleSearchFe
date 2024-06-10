@@ -8,7 +8,8 @@ export const useSearchStore = defineStore('search', {
     searchResult: {},
     listChat: [],
     listHighlight: [],
-    hightlightStatus: 0
+    hightlightStatus: 0,
+    chatContent:{}
   }),
   actions: {
     async SimpleSearchName(data, chatid) {
@@ -19,7 +20,8 @@ export const useSearchStore = defineStore('search', {
         this.searchResult = result.data
         if (result.status === 200) {
           let searchresult = result.data
-          if (result.data.length === 0) {
+
+          if (result.data.length === 0 || result.data.length > 10) {
             searchresult = []
           }
           const conversation = {
@@ -57,6 +59,7 @@ export const useSearchStore = defineStore('search', {
             data.phone ||
             data.cccd ||
             data.gender ||
+            data.age ||
             data.linkfacebook,
           higlighted: 0
         })
@@ -80,9 +83,10 @@ export const useSearchStore = defineStore('search', {
         this.searchResult = result.data
         if (result.status === 200) {
           let searchresult = result.data
-          if (result.data.length === 0) {
+          if (result.data.length === 0 || result.data.length > 10) {
             searchresult = []
           }
+          console.log("data",data);
           const conversation = {
             content: {
               search: data,
@@ -95,9 +99,7 @@ export const useSearchStore = defineStore('search', {
       } catch (error) {
         const conversation = {
           content: {
-            search: {
-              name: data
-            },
+            search: data,
             result: []
           },
           chat_id: chatid
@@ -109,10 +111,8 @@ export const useSearchStore = defineStore('search', {
       try {
         const result = await service.post('API/ChatGetCreate/', data)
         if (result.status === 201) {
-          console.log('Create chat', result.data)
           await this.SimpleSearchName(data?.name, result.data.id)
           await this.GetAllChat()
-          console.log('redirect')
           router.push({ path: `/chat/${result.data.id}` })
         }
       } catch (error) {
@@ -137,12 +137,20 @@ export const useSearchStore = defineStore('search', {
     },
     async UpdateChat(id, data) {
       try {
-        const result = await service.put(`AccountManagement/ChatsUpdateDelete/${id}/`, data)
+        const result = await service.put(`AccountManagement/ChatsUpdateDelete/${id}`, data)
         if (result.status === 200) {
           this.GetAllChat()
+          notify({
+            type:"success",
+            title:"Update success"
+          })
         }
       } catch (error) {
-        console.log(error)
+
+        notify({
+          type:"error",
+          title:`${error.message}`
+        })
       }
     },
     async DeleteChat(id) {
@@ -190,6 +198,17 @@ export const useSearchStore = defineStore('search', {
           console.log('chat detail', this.chatDetail)
         }
       } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetChatContent(id) {
+      try {
+        const result = await service.get(`API/ChatGetCreate/?id=${id}`)
+        if (result.status === 200) {
+          this.chatContent = result.data[0]
+        }
+      } catch (error) {
+        this.chatContent = {}
         console.log(error)
       }
     }

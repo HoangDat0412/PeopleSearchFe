@@ -2,7 +2,26 @@
 import Editor from "@tinymce/tinymce-vue";
 import { useShowStore } from "@/stores/show";
 import { mdiClose } from "@mdi/js";
+import { onBeforeMount, ref } from "vue";
+import { useSearchStore } from "@/stores/search";
+import { useChatStore } from "@/stores/chat";
 const show = useShowStore();
+
+const props = defineProps(['chatid'])
+const chatid = props.chatid
+const useSearch = useSearchStore()
+const chat = useChatStore()
+const editorRef = ref("");
+onBeforeMount(async ()=>{
+  await useSearch.GetChatContent(chatid)
+  editorRef.value = useSearch.chatContent?.note
+})
+const handleUpdateNote = async() =>{
+  await chat.UpdateChat(chatid,{
+    note:editorRef.value
+  })
+
+}
 </script>
 
 <template>
@@ -11,13 +30,14 @@ const show = useShowStore();
       <v-btn size="small"  @click="show.showNote = false">
         <v-icon :icon="mdiClose"></v-icon>
       </v-btn>
-      <v-btn size="small" @click="show.showNote = false">
+      <v-btn size="small" @click="handleUpdateNote">
         Save
       </v-btn>
     </div>
 
     <main id="sample" style="position: relative">
       <Editor
+        v-model="editorRef"
         style="height: 100%"
         api-key="36eoq21c3oufqsxwph8kro700eiewqbshmx5mua6023wrkpy"
         :init="{
@@ -27,8 +47,9 @@ const show = useShowStore();
           toolbar:
             'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         }"
-        initial-value="Welcome to TinyMCE!"
+      
       />
+      <!--   :initial-value="useSearch.chatContent?.note" -->
     </main>
   </v-navigation-drawer>
 </template>

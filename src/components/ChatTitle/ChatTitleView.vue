@@ -3,43 +3,45 @@
 import { mdiDotsVertical, mdiDeleteOutline, mdiPencilOutline, mdiStar, mdiShare, mdiCheck } from '@mdi/js'
 import { ref } from 'vue';
 import './chattitle.scss'
+import { useSearchStore } from '@/stores/search';
+import { notify } from '@kyvg/vue3-notification';
 
 // khai báo biến
+const useSearch = useSearchStore()
+const props = defineProps(['chat'])
+let chat = props.chat
+console.log("chat",chat);
 const isEdit = ref(false)
-const isHighlight = ref(false)
-const title = ref("Nguyễn Văn A")
-
+const isHighlight = ref(chat?.higlighted)
+const title = ref(chat?.name || '')
 // khai báo function
 const handleUpdateTitle = () => {
-    //   if (title.value.trim() === '') {
-    //     notify({
-    //       title: 'Update Chat Title Error',
-    //       text: 'Your chat title must be not null',
-    //       type: 'error'
-    //     })
-    //   } else {
-    //     useSearch.UpdateChat(chat?.id, {
-    //       name: title.value,
-    //       higlighted: chat?.higlighted
-    //     })
-
-    //   }
-
+      if (title.value.trim() === '') {
+        notify({
+          title: 'Your chat title must be not null',
+          type: 'error'
+        })
+      } else {
+        console.log("update chat");
+        useSearch.UpdateChat(chat?.id, {
+          name: title.value,
+          higlighted: chat?.higlighted
+        })
+      }
     isEdit.value = false
 }
 
-// const handleUpdateHighLight = (status) => {
-//   useSearch.UpdateChat(chat?.id, {
-//     name: chat?.name,
-//     higlighted: status
-//   })
+const handleUpdateHighLight = (status) => {
+  useSearch.UpdateChat(chat?.id, {
+    name: chat?.name,
+    higlighted: status
+  })
+  isHighlight.value = status;
+}
 
-//   isHighlight.value = status
-// }
-
-// const handleDeleteChat = () => {
-//   useSearch.DeleteChat(chat?.id)
-// }
+const handleDeleteChat = () => {
+  useSearch.DeleteChat(chat?.id)
+}
 
 const handleEdit = () => {
     isEdit.value = true
@@ -50,9 +52,9 @@ const handleEdit = () => {
 
 <template>
     <main class="my-1">
-        <v-list-item density="compact" value="home" height="30" v-if="!isEdit" >
+        <v-list-item density="compact" :value="`chat-${chat?.id}`" height="30" v-if="!isEdit" >
             <div class="d-flex align-center justify-space-between">
-                <RouterLink class="" style="text-decoration: none; color: unset;" to="/chat">{{ title }}</RouterLink>
+                <RouterLink class="" style="text-decoration: none; color: unset;" :to="`/chat/${chat?.id}`">{{ title }}</RouterLink>
                 <div class="menu">
                     <v-menu>
                         <template v-slot:activator="{ props }">
@@ -61,7 +63,7 @@ const handleEdit = () => {
                             </span>
                         </template>
                         <v-list>
-                            <v-list-item value="delete" style="min-height: 0;" class="my-1">
+                            <v-list-item value="delete" style="min-height: 0;" class="my-1" @click="() => handleDeleteChat()" >
                                 <v-list-item-title class="d-flex align-center" style="color: #D50000; font-size: 13px;">
                                     <span style="font-size: 12px;" class="me-1"><v-icon
                                             :icon="mdiDeleteOutline" /></span>
@@ -74,9 +76,8 @@ const handleEdit = () => {
                             </v-list-item>
                             <v-list-item value="HightLight" style="min-height: 0;" class="my-1">
                                 <v-list-item-title class="d-flex align-center" style="font-size: 13px;">
-                                    <span v-if="isHighlight" style="font-size: 12px; color: #FFEB3B;"
-                                        class="me-1"><v-icon :icon="mdiStar" /></span>
-                                    <span v-else style="font-size: 12px;" class="me-1"><v-icon :icon="mdiStar" /></span>
+                                    <span @click="() => handleUpdateHighLight(0)" v-if="isHighlight" style="font-size: 12px; color: #FFEB3B;" class="me-1"><v-icon :icon="mdiStar"  /></span>
+                                    <span @click="() => handleUpdateHighLight(1)" v-else style="font-size: 12px;" class="me-1"><v-icon :icon="mdiStar" /></span>
                                     HightLight</v-list-item-title>
                             </v-list-item>
                             <v-list-item value="share" style="min-height: 0;" class="my-1">

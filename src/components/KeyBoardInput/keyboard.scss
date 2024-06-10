@@ -1,0 +1,32 @@
+.keyboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .simple-keyboard {
+    margin-top: 20px;
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  .v-text-field {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .language-select {
+    min-width: 120px;
+    max-width: 150px;
+    margin-top: -4px; /* Align select with text field */
+    padding: 0;
+  }
+  
+  .language-select .v-input__control {
+    min-height: auto; /* Reduce height */
+  }
+  
+  .language-select .v-field__input {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }

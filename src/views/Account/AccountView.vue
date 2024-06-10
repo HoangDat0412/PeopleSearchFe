@@ -1,24 +1,50 @@
 <script setup>
-import { ref } from "vue";
-import FooterView from '@/components/Footer/FooterView.vue'
-const name = ref("Hoàng Đạt");
+// import
+import { onBeforeMount, ref } from "vue";
+import FooterView from "@/components/Footer/FooterView.vue";
+import { notify } from "@kyvg/vue3-notification";
+import { useUserStore } from "@/stores/user";
 
-const updateName = () => {
-  console.log("Updated name:", name.value);
-  // Add your update logic here
-};
+// khaii báo biến
+const user = useUserStore();
+const name = ref("");
 const oldPassword = ref("");
 const newPassword = ref("");
 const repeatPassword = ref("");
 
-const changePassword = () => {
-  if (newPassword.value === repeatPassword.value) {
-    console.log("Passwords match, proceed with change");
-    // Add your password change logic here
+// function
+const handleUpdateUserName = async () => {
+  if (name.value.trim() === "") {
+    notify({
+      title: "Update false user name can't null",
+      type: "error",
+    });
   } else {
-    console.log("Passwords do not match");
+    await user.userUpdateInformation({
+      username: name.value,
+    });
   }
 };
+
+const changePassword = () => {
+  if (newPassword.value === repeatPassword.value) {
+    notify({
+      type: "error",
+      title: "Passwords match, proceed with change",
+    });
+    // Add your password change logic here
+  } else {
+    notify({
+      type: "error",
+      title: "Passwords do not match",
+    });
+  }
+};
+// function của vuejs
+onBeforeMount(async () => {
+  await user.getUserInformation();
+  name.value = user.userInformation?.current_user_name;
+});
 </script>
 
 <template>
@@ -36,7 +62,14 @@ const changePassword = () => {
             density="compact"
             outlined
           ></v-text-field>
-          <v-btn type="submit" color="primary" class=""> Update </v-btn>
+          <v-btn
+            type="button"
+            @click="() => handleUpdateUserName()"
+            color="primary"
+            class=""
+          >
+            Update
+          </v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -73,12 +106,28 @@ const changePassword = () => {
         </v-form>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="12" class="mt-5">
+        <h2 class="title mb-3">Multi-factor authentication</h2>
+        <v-divider></v-divider>
+
+        <v-form class="mt-5">
+          <v-select
+          variant="solo"
+            :items="[
+              { title: 'On', value: true },
+              { title: 'Off', value: false },
+            ]"
+            density="compact"
+          ></v-select>
+          <v-btn type="submit" color="primary" class=""> Save </v-btn>
+        </v-form>
+      </v-col>
+    </v-row>
   </v-container>
 
-  <FooterView/>
+  <FooterView />
 </template>
-
-
 
 <style scoped>
 .title {

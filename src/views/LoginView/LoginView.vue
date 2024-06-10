@@ -2,9 +2,38 @@
 // thư viện
 import { ref } from 'vue';
 import { mdiEmailOutline, mdiEyeOff, mdiEye,mdiFacebook,mdiGmail } from '@mdi/js'
+import { useUserStore } from '@/stores/user';
+import { checkNull } from '@/validation/validation';
 
-
+// khai báo biến
 const visible = ref(false)
+const user = useUserStore()
+const passWord = ref('')
+const errorPassword = ref('')
+const username = ref('')
+const errUserName = ref('')
+
+const handleLogin = async () => {
+  if (!checkNull(passWord.value)) {
+    errorPassword.value = 'password không được bỏ trống'
+  } else {
+    errorPassword.value = ''
+  }
+  if (!checkNull(username.value)) {
+    errUserName.value = 'password không được bỏ trống'
+  } else {
+    errUserName.value = ''
+  }
+
+  const flag = checkNull(passWord.value) && checkNull(username.value)
+
+  if (flag) {
+    await user.login({
+      username: username.value,
+      password: passWord.value
+    })
+  }
+}
 </script>
 <template>
     <div>
@@ -14,7 +43,7 @@ const visible = ref(false)
         <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
             <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
-            <v-text-field density="compact" :prepend-inner-icon="mdiEmailOutline" variant="outlined"></v-text-field>
+            <v-text-field v-model="username" :error-messages="errUserName" density="compact" :prepend-inner-icon="mdiEmailOutline" variant="outlined"></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                 Password
@@ -24,7 +53,7 @@ const visible = ref(false)
                     Forgot login password?</RouterLink>
             </div>
 
-            <v-text-field :append-inner-icon="visible ? mdiEyeOff : mdiEye" :type="visible ? 'text' : 'password'"
+            <v-text-field v-model="passWord" :error-messages="errorPassword" :append-inner-icon="visible ? mdiEyeOff : mdiEye" :type="visible ? 'text' : 'password'"
                 density="compact" prepend-inner-icon="mdi-lock-outline" variant="outlined"
                 @click:append-inner="visible = !visible"></v-text-field>
 
@@ -45,7 +74,7 @@ const visible = ref(false)
                 </v-card-text>
             </v-card>
 
-            <v-btn class="mb-8" color="blue" size="large" variant="tonal" block>
+            <v-btn class="mb-8" color="blue" size="large" variant="tonal" block @click="handleLogin">
                 Log In
             </v-btn>
 

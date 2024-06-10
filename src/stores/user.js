@@ -70,11 +70,24 @@ export const useUserStore = defineStore("user", {
           Cookies.set(TOKEN, result.data.token, { expires: 30 });
           Cookies.set(csrftoken, result.data.csrf_token, { expires: 30 });
           router.push({ path: "/" });
+          notify({
+            type: 'success',
+            title: `Welcome back to People Search`
+          })
         }
       } catch (error) {
         console.log(error);
-        // this.userLogin = false
-        alert("false");
+        if(error.response.status === 400){
+          notify({
+            type: 'error',
+            title: `Wrong account or password`
+          })
+        }else{
+          notify({
+            type: 'error',
+            title: `${error.message}`
+          })
+        }
       }
     },
     async getUserInformation() {
@@ -85,24 +98,21 @@ export const useUserStore = defineStore("user", {
           console.log(this.userInformation);
         }
       } catch (error) {
-        console.log(error);
         this.userInformation = false;
       }
     },
     async logout() {
       try {
         Cookies.remove(TOKEN);
-        this.$notify({
-          title: "Success",
-          text: "Logout Account!",
+        notify({
+          title: "logout Account Success",
           type: "success",
         });
         this.getUserInformation();
         router.push("/login");
       } catch (error) {
-        this.$notify({
-          title: "Error",
-          text: "Logout Account False!",
+        notify({
+          title: "Logout Account Error",
           type: "error",
         });
       }
@@ -110,7 +120,7 @@ export const useUserStore = defineStore("user", {
     async userUpdateInformation(data) {
       try {
         const result = await service.put(
-          "AccountManagement/UpdateUsername/ ",
+          "AccountManagement/UpdateUsername/",
           data
         );
         if (result.status === 200) {
@@ -121,10 +131,17 @@ export const useUserStore = defineStore("user", {
           return this.getUserInformation();
         }
       } catch (error) {
-        notify({
-          title: "Update username false",
-          type: "error",
-        });
+        if(error.response.status === 400){
+          notify({
+            title: `user name already exist`,
+            type: "error",
+          });
+        }else{
+          notify({
+            title: `update user name false `,
+            type: "error",
+          });
+        }
         console.log(error);
       }
     },

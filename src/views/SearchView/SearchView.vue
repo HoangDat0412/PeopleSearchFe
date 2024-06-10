@@ -51,8 +51,6 @@ const show = useShowStore();
                 <v-card-text style="text-align: left;">Give me a file of voice. I can tell you something I realize from them</v-card-text>
               </v-card>
             </v-col>
-
-            
           </v-row>
         </v-col>
       </v-row>

@@ -4,10 +4,17 @@ import cccd from "@/assets/img/cccd.png";
 import AlbumImageView from "@/components/AlbumImage/AlbumImageView.vue";
 import AlbumVideoView from "@/components/AlbumVideo/AlbumVideoView.vue";
 import MapView from "@/components/Map/MapView.vue";
+
+
+// khai báo biến
+const props = defineProps(['item', 'resultlength'])
+const item = props?.item
+const resultlength = props?.resultlength
+
 const exportToPDF = () => {
   html2pdf(document.getElementById("element-to-print"), {
     margin: 1,
-    filename: "HoangTuanAnhDat.pdf",
+    filename: `${item?.name}.pdf`,
     image: { type: "png", quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -32,7 +39,7 @@ const exportToPDF = () => {
               </div>
               <img width="100%" :src="cccd" alt="Căn Cước Công Dân" />
               <div class="text-subtitle-2 text-center" style="font-weight: 600">
-                Search Result: 10
+                Search Result: {{ resultlength }}
               </div>
             </div>
            
@@ -40,18 +47,17 @@ const exportToPDF = () => {
           <v-col cols="12" md="6">
             <v-card class="">
               <v-card-item>
-                <p class="mb-1">FullName: Hoàng Tuấn Anh Đạt</p>
-                <p class="mb-1">Email: hoang2811dat@gmail.com</p>
-                <p class="mb-1">Phone: 0965820296</p>
-                <p class="mb-1">Age: 21</p>
-                <p class="mb-1">IP: Not Found</p>
-                <p class="mb-1">CCCD/Passport: Not Found</p>
-                <p class="mb-1">MST: Not Found</p>
-                <p class="mb-1">Link Facebook: Not Found</p>
-                <p class="mb-1">Gender: Male</p>
-                <p class="mb-1">Address: Hà Nội</p>
-                <p class="mb-1">Relationship:</p>
-                <p class="mb-1">Bio:</p>
+                <p class="mb-1">FullName: {{ item?.name }}</p>
+                <p class="mb-1">Email: {{ item?.email }}</p>
+                <p class="mb-1">Phone: {{ item?.phone }}</p>
+                <p class="mb-1">BirthDay: {{ item?.birth }}</p>
+                <p class="mb-1">IP: {{ item?.ip }}</p>
+                <p class="mb-1">CCCD/Passport: {{ item?.identity_id }}</p>
+                <p class="mb-1">Link Facebook: {{ item?.linkfacebook }}</p>
+                <p class="mb-1">Gender: {{ item?.gender }}</p>
+                <p class="mb-1">Address: {{ item?.address }}</p>
+                <p class="mb-1">Relationship: {{ item?.relationship }}</p>
+                <p class="mb-1">Bio: {{ item?.biography }}</p>
               </v-card-item>
             </v-card>
             

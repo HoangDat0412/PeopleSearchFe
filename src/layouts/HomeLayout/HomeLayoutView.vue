@@ -1,14 +1,23 @@
 <script setup>
 // library 
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { mdiMenu, mdiHome, mdiMagnify, mdiCog, mdiLogout } from '@mdi/js'
 import avataruser from '@/assets/img/useravatar.jpg'
 import './homelayout.scss'
+import { useUserStore } from '@/stores/user';
+import router from '@/router';
 // component
 import GroupChatTitle from '@/components/GroupChatTitle/GroupChatTitle.vue';
 // biến 
 const drawer = ref(true)
-
+const user = useUserStore()
+// function vuejs
+onBeforeMount(async () => {
+  await user.getUserInformation()
+  if (!user?.userInformation?.current_user_name) {
+    router.push('/login')
+  }
+})
 
 </script>
 
@@ -18,8 +27,8 @@ const drawer = ref(true)
       <v-menu class="ps-2 pe-2">
         <template v-slot:activator="{ props }">
           <v-card style="cursor: pointer;" v-bind="props">
-            <v-list-item class="mt-2 mb-2" :prepend-avatar="avataruser" subtitle="sandra_a88@gmailcom"
-              title="Sandra Adams"></v-list-item>
+            <v-list-item class="mt-2 mb-2" :prepend-avatar="avataruser" :subtitle="user?.userInformation?.current_user_email"
+              :title="user?.userInformation?.current_user_name"></v-list-item>
           </v-card>
         </template>
 
@@ -27,7 +36,7 @@ const drawer = ref(true)
           <v-list-item value="account" :prepend-icon="mdiCog">
             <RouterLink style="color: unset; text-decoration: none;font-size: unset;" to="/account"> Account</RouterLink>
           </v-list-item>
-          <v-list-item value="logout" :prepend-icon="mdiLogout">
+          <v-list-item value="logout" :prepend-icon="mdiLogout" @click="() => user.logout()">
             <v-list-item-title> Logout</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -36,10 +45,11 @@ const drawer = ref(true)
 
       <v-list nav>
         <v-list-item :prepend-icon="mdiHome" to="/dashboard" title="Dashboard" value="dashboard"></v-list-item>
-        <v-list-item :prepend-icon="mdiMagnify" to="/" title="New Search" value="newsearch"></v-list-item>
+        <v-list-item :prepend-icon="mdiMagnify" to="/newsearch" title="New Search" value="newsearch"></v-list-item>
       </v-list>
 
       <GroupChatTitle />
+      
     </v-navigation-drawer>
 
     <v-app-bar class="d-flex justify-space-between">
@@ -58,7 +68,6 @@ const drawer = ref(true)
     </v-app-bar>
 
     <v-main style="height: 100vh; overflow-y: unset;">
-      <!-- Your main content goes here -->
       <RouterView />
       
     </v-main>

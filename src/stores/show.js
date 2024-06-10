@@ -7,7 +7,11 @@ export const useShowStore = defineStore('show', {
     showFormSearch:false,
     showSpiner: false,
     showNote:false,
-    showKeyBoard:true
+    showKeyBoard:false,
+    showNameKeyboard:false,
+    showEmailKeyboard:false,
+    showLinkFaceBookKeyboard:false,
+    showAddressKeyboard:false
   }),
   actions: {
     async SetShowSpinner(data) {

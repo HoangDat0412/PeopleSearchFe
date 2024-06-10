@@ -1,14 +1,18 @@
 <script setup>
 import "./home.scss";
 import CardIntroHomeView from "@/components/CardIntroHome/CardIntroHomeView.vue";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import ChattitleHome from '@/components/ChatTitleHome/ChatTitleHome.vue'
 import FooterView from '@/components/Footer/FooterView.vue'
+import { useSearchStore } from "@/stores/search";
 // khai báo biến
 const tab = ref(null);
-// const show = useShowStore()
- import KeyBoard from "@/components/KeyBoard/KeyBoard.vue";
-// import { useShowStore } from "@/stores/show";
+const search = useSearchStore()
+
+// hàm trong vuejs
+watchEffect(async () => {
+  await search.GetAllChat()
+})
 </script>
 
 <template>
@@ -75,22 +79,22 @@ const tab = ref(null);
             <v-tabs-window v-model="tab">
               <v-tabs-window-item value="one">
                 <v-row align="center" dense class="mt-3 mb-3">
-                  <v-col cols="12" sm="4" md="3">
-                    <ChattitleHome/>
+                  <v-col cols="12" sm="4" md="3" v-for="chat in search?.listHighlight" :key="chat?.id">
+                    <ChattitleHome  :chat="chat" />
                   </v-col>
                 </v-row>
               </v-tabs-window-item>
               <v-tabs-window-item value="two"> 
                 <v-row align="center" dense class="mt-3 mb-3">
-                  <v-col cols="12" sm="4" md="3">
-                    <ChattitleHome/>
+                  <v-col cols="12" sm="4" md="3" v-for="chat in search?.listChat" :key="chat?.id">
+                    <ChattitleHome  :chat="chat"/>
                   </v-col>
                 </v-row>  
               </v-tabs-window-item>
               <v-tabs-window-item value="three"> 
                 <v-row align="center" dense class="mt-3 mb-3">
-                  <v-col cols="12" sm="4" md="3">
-                    <ChattitleHome/>
+                  <v-col cols="12" sm="4" md="3" v-for="chat in search?.listChat" :key="chat?.id">
+                    <ChattitleHome  :chat="chat"/>
                   </v-col>
                 </v-row>  
               </v-tabs-window-item>
@@ -100,10 +104,7 @@ const tab = ref(null);
       </v-col>
     </v-row>
 
-
-
-    <KeyBoard/>
-
+  
     <FooterView/>
   </v-container>
 
