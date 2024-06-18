@@ -6,15 +6,17 @@ import FormSearchAudio from '@/components/FormSearchAudio/FormSearchAudio.vue';
 import FormSearch from '@/components/FormSearch/FormSearch.vue'
 import NoteView from '@/components/Note/NoteView.vue'
 import ConversationView from '@/components/Conversation/ConversationView.vue'
-import { watchEffect } from 'vue';
+import { onBeforeMount, watchEffect } from 'vue';
 import { useSearchStore } from '@/stores/search';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { useNoteStore } from '@/stores/note';
+import { useInputStore } from '@/stores/input';
 // import { useShowStore } from '@/stores/show';
 
 // khai báo biến 
 const route = useRoute()
 const useSearch = useSearchStore()
-
+const note = useNoteStore()
 // khai báo function vuejs 
 watchEffect(async () => {
   await useSearch.GetChatDetail(route.params.id)
@@ -24,6 +26,19 @@ onBeforeRouteUpdate(async (to, from, next) => {
   // fetchChatDetail(to.params.id);
   await useSearch.GetChatDetail(to.params.id)
   next()
+})
+const inputStore = useInputStore()
+onBeforeMount(()=>{
+  inputStore.search = ""
+  inputStore.address = ""
+  inputStore.age = ""
+  inputStore.cccd = ""
+  inputStore.linkfacebook = "",
+  inputStore.gender = "",
+  inputStore.phone = "",
+  inputStore.email = "",
+  inputStore.national = "",
+  inputStore.name = ""
 })
 </script>
 
@@ -41,7 +56,7 @@ onBeforeRouteUpdate(async (to, from, next) => {
             <FormSearchAudio />
             <FormSearch :chatid="route.params.id"/>
         </v-container>
-        <NoteView :chatid="route.params.id"/>
+        <NoteView :chatid="note.chatid"/>
     </v-app>
 </template>
 

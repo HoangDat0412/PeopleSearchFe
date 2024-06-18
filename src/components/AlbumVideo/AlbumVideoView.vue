@@ -6,10 +6,10 @@ import lgVideo from 'lightgallery/plugins/video'
 // Import LightGallery CSS
 import 'lightgallery/css/lightgallery.css'
 import 'lightgallery/css/lg-video.css'
-const galleryRef = ref(null)
+const galleryVideo = ref(null)
 
 onMounted(() => {
-  lightGallery(galleryRef.value, {
+  lightGallery(galleryVideo.value, {
     plugins: [lgVideo],
     speed: 500
   })
@@ -17,7 +17,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="galleryRef" class="gallery mt-3">
+    <div ref="galleryVideo" class="gallery mt-3">
         <a  v-for="n in 6" :key="n"  href="https://www.youtube.com/embed/zLwpcLJibw0?si=VYTF-4xwYz1YHc7I">
             <img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"/>
         </a>
@@ -47,5 +47,9 @@ onMounted(() => {
 .gallery img:hover {
     -webkit-transform: scale(1.3);
     transform: scale(1.3);
+}
+
+.v-overlay {
+    z-index: 1000 !important;
 }
 </style>

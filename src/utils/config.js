@@ -2,7 +2,8 @@ export const DOMAIN = 'http://117.1.29.237:7077/'
 
 // http://117.1.29.237:7077
 //https://htad.id.vn
-export const TOKEN = 'peoplesearchtoken'
+export const TOKEN = 'peoplesearchaccess'
+export const REFRESHTOKEN = 'peoplesearchrefresh'
 export const USER_LOGIN = 'USER_LOGIN'
 
 // export const XCSRFToken = 'X-CSRFToken'

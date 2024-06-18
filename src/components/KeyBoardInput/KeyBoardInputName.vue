@@ -58,17 +58,19 @@ const show = useShowStore()
 <template>
 
   <div class="keyboard-container">
-    <v-text-field label="Full Name" v-model="storeInput.name" variant="solo">
-      <template v-slot:append>
+    <div class="text-subtitle-1 text-medium-emphasis">Full Name</div>
+    <v-text-field v-model="storeInput.name" variant="solo" density="compact" >
+      <template v-slot:prepend>
         <v-icon :icon="mdiKeyboard" @click="show.showNameKeyboard = false" class="me-1"></v-icon>
-        <v-select
+        <v-autocomplete
           v-model="currentLanguage"
           :items="languages"
           dense
           hide-details
+          variant="solo" density="compact"
           outlined
           class="language-select"
-        ></v-select>
+        ></v-autocomplete>
       </template>
     </v-text-field>
     <div  class="simple-keyboard"></div>

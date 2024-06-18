@@ -1,18 +1,25 @@
 <script setup>
 import "./home.scss";
-import CardIntroHomeView from "@/components/CardIntroHome/CardIntroHomeView.vue";
+// import CardIntroHomeView from "@/components/CardIntroHome/CardIntroHomeView.vue";
 import { ref, watchEffect } from "vue";
-import ChattitleHome from '@/components/ChatTitleHome/ChatTitleHome.vue'
-import FooterView from '@/components/Footer/FooterView.vue'
+import ChattitleHome from "@/components/ChatTitleHome/ChatTitleHome.vue";
+import FooterView from "@/components/Footer/FooterView.vue";
 import { useSearchStore } from "@/stores/search";
+import { mdiMagnify } from "@mdi/js";
 // khai báo biến
 const tab = ref(null);
-const search = useSearchStore()
+const search = useSearchStore();
 
 // hàm trong vuejs
 watchEffect(async () => {
-  await search.GetAllChat()
-})
+  await search.GetAllChat();
+});
+
+const name = ref("")
+const handleSearch = async ()=>{
+  await search.SearchChat(name.value)
+}
+
 </script>
 
 <template>
@@ -22,7 +29,7 @@ watchEffect(async () => {
         <h1 style="font-weight: 500">General</h1>
       </v-col>
     </v-row>
-    <v-row class="mb-6">
+    <!-- <v-row class="mb-6">
       <v-col cols="12" class="mt-1">
         <h2>Get started with Chat</h2>
       </v-col>
@@ -61,7 +68,7 @@ watchEffect(async () => {
           text="Give me file of video or picture or draw, etc. I can tell you something I relize from them."
         />
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <v-row class="mb-12">
       <v-col cols="12" class="mt-1">
@@ -70,33 +77,65 @@ watchEffect(async () => {
       <v-col cols="12">
         <v-card>
           <v-tabs v-model="tab">
-            <v-tab value="one">Hightlight chat</v-tab>
-            <v-tab value="two">Recently created</v-tab>
-            <v-tab value="three">All chat</v-tab>
+            <v-tab value="one">Recently created</v-tab>
+            <v-tab value="two">Favorite Chat Session</v-tab>
+            <!-- <v-tab value="three">Export Chat Session</v-tab> -->
           </v-tabs>
 
           <v-card-text>
             <v-tabs-window v-model="tab">
               <v-tabs-window-item value="one">
                 <v-row align="center" dense class="mt-3 mb-3">
-                  <v-col cols="12" sm="4" md="3" v-for="chat in search?.listHighlight" :key="chat?.id">
-                    <ChattitleHome  :chat="chat" />
+                  <v-col cols="12" class="mb-4">
+                    <v-text-field
+                    @change="handleSearch"
+                    :append-inner-icon="mdiMagnify"
+                    density="compact"
+                    label="Search Chat Session"
+                    variant="solo"
+                    hide-details
+                    single-line
+                    @click:append-inner="handleSearch"
+                    v-model="name"
+                  ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    v-for="chat in search?.listChat"
+                    :key="chat?.id"
+                  >
+                    <ChattitleHome :chat="chat" />
+                  </v-col>
+                </v-row>
+
+              </v-tabs-window-item>
+              <v-tabs-window-item value="two">
+                <v-row align="center" dense class="mt-3 mb-3">
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    v-for="chat in search?.listHighlight"
+                    :key="chat?.id"
+                  >
+                    <ChattitleHome :chat="chat" />
                   </v-col>
                 </v-row>
               </v-tabs-window-item>
-              <v-tabs-window-item value="two"> 
+              <v-tabs-window-item value="three">
                 <v-row align="center" dense class="mt-3 mb-3">
-                  <v-col cols="12" sm="4" md="3" v-for="chat in search?.listChat" :key="chat?.id">
-                    <ChattitleHome  :chat="chat"/>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    v-for="chat in search?.listChat"
+                    :key="chat?.id"
+                  >
+                    <ChattitleHome :chat="chat" />
                   </v-col>
-                </v-row>  
-              </v-tabs-window-item>
-              <v-tabs-window-item value="three"> 
-                <v-row align="center" dense class="mt-3 mb-3">
-                  <v-col cols="12" sm="4" md="3" v-for="chat in search?.listChat" :key="chat?.id">
-                    <ChattitleHome  :chat="chat"/>
-                  </v-col>
-                </v-row>  
+                </v-row>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-card-text>
@@ -104,11 +143,8 @@ watchEffect(async () => {
       </v-col>
     </v-row>
 
-  
-    <FooterView/>
+    <FooterView />
   </v-container>
-
-  
 </template>
 
 <style scoped>

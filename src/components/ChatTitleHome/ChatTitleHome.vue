@@ -7,7 +7,7 @@ import {
   mdiDeleteOutline,
   mdiPencilOutline,
   mdiStar,
-  mdiShare,
+  mdiDownload
 } from "@mdi/js";
 import { ref } from "vue";
 import { notify } from "@kyvg/vue3-notification";
@@ -134,15 +134,15 @@ const handleEdit = () => {
                 HightLight</v-list-item-title
               >
             </v-list-item>
-            <v-list-item value="share" style="min-height: 0" class="my-1">
+            <v-list-item :to="`/exportchat/${chat?.id}`" value="share" style="min-height: 0" class="my-1">
               <v-list-item-title
                 class="d-flex align-center"
                 style="font-size: 13px"
               >
                 <span style="font-size: 12px" class="me-1"
-                  ><v-icon :icon="mdiShare"
+                  ><v-icon :icon="mdiDownload"
                 /></span>
-                Share</v-list-item-title
+                Export Session</v-list-item-title
               >
             </v-list-item>
           </v-list>

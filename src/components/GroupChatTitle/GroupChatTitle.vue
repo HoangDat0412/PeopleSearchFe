@@ -18,7 +18,7 @@ watchEffect(async () => {
   <main>
     
     <div class="groupchattitle">
-        <v-list-subheader class="ms-3 pt-2" style="font-weight: 900; font-size: 16px;">Current Chat</v-list-subheader>
+        <v-list-subheader class="ms-3 pt-2" style="font-weight: 900; font-size: 16px;">Chat Session</v-list-subheader>
       <v-list nav>
         <ChatTitleView v-for="chat in usesearch?.listChat" :key="chat.id" :chat="chat" />
       </v-list>

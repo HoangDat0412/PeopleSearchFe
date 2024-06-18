@@ -1,16 +1,31 @@
 <script setup>
 // thư viện,component
 import './searchview.scss'
-import SearchInput from '../../components/SearchInput/SearchInputView.vue'
+import SearchInputForm from '@/components/SearchInputForm/SearchInputFormView.vue'
 import FormSearchVideo from '@/components/FormSearchVideo/FormSearchVideo.vue'
 import FormSearchAudio from '@/components/FormSearchAudio/FormSearchAudio.vue';
 import FormSearch from '@/components/FormSearch/FormSearch.vue'
 import { mdiAttachment, mdiFormSelect, mdiMicrophone} from '@mdi/js';
 import { mdiHandWaveOutline } from '@mdi/js';
 import { useShowStore } from '@/stores/show';
+import { onBeforeMount } from 'vue';
+import { useInputStore } from '@/stores/input';
 
 // khai báo biến 
 const show = useShowStore();
+const inputStore = useInputStore()
+onBeforeMount(()=>{
+  inputStore.search = ""
+  inputStore.address = ""
+  inputStore.age = ""
+  inputStore.cccd = ""
+  inputStore.linkfacebook = "",
+  inputStore.gender = "",
+  inputStore.phone = "",
+  inputStore.email = "",
+  inputStore.national = "",
+  inputStore.name = ""
+})
 </script>
 
 <template>
@@ -28,7 +43,7 @@ const show = useShowStore();
 
           <v-row align="center" justify="center" dense class="mt-5">
             <v-col cols="12" sm="6" md="4" >
-              <v-card class="mx-auto" max-width="500" title="Search By Information" link @click="show.showFormSearch = true">
+              <v-card class="mx-auto" max-width="500" title="Search People Information" link @click="show.showFormSearch = true">
                 <template v-slot:prepend>
                   <v-icon color="primary" :icon="mdiFormSelect"></v-icon>
                 </template>
@@ -36,7 +51,7 @@ const show = useShowStore();
               </v-card>
             </v-col>
             <v-col cols="12" sm="6" md="4">
-              <v-card class="mx-auto" max-width="500" title="Search By Image/Video" link @click="show.showFormVideo = true">
+              <v-card class="mx-auto" max-width="500" title="Search People Image/Video" link @click="show.showFormVideo = true">
                 <template v-slot:prepend>
                   <v-icon color="primary" :icon="mdiAttachment"></v-icon>
                 </template>
@@ -44,7 +59,7 @@ const show = useShowStore();
               </v-card>
             </v-col>
             <v-col cols="12" sm="6" md="4">
-              <v-card class="mx-auto" max-width="500" title="Search By Void/Audio" link @click="show.showFormAudio = true">
+              <v-card class="mx-auto" max-width="500" title="Search People Void/Audio" link @click="show.showFormAudio = true">
                 <template v-slot:prepend>
                   <v-icon color="primary" :icon="mdiMicrophone"></v-icon>
                 </template>
@@ -54,7 +69,7 @@ const show = useShowStore();
           </v-row>
         </v-col>
       </v-row>
-      <SearchInput />
+      <SearchInputForm/>
       <FormSearchVideo />
       <FormSearchAudio />
       <FormSearch />

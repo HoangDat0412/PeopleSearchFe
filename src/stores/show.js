@@ -5,13 +5,16 @@ export const useShowStore = defineStore('show', {
     showFormVideo:false,
     showFormAudio:false,
     showFormSearch:false,
+    showFormSearchName:false,
     showSpiner: false,
     showNote:false,
     showKeyBoard:false,
     showNameKeyboard:false,
     showEmailKeyboard:false,
     showLinkFaceBookKeyboard:false,
-    showAddressKeyboard:false
+    showAddressKeyboard:false,
+    showAlbumImage:false,
+    showAlbumVideo:false
   }),
   actions: {
     async SetShowSpinner(data) {

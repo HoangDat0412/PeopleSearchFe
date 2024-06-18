@@ -7,6 +7,8 @@ import SearchView from '@/views/SearchView/SearchView.vue'
 import ChatView from '@/views/ChatView/ChatView.vue'
 import AccountView from '@/views/Account/AccountView.vue'
 import ForgotPassword from '@/views/ForgotPassword/ForgotPasswordView.vue'
+import GuideView from '@/views/Guide/GuideView.vue'
+import ExportChatView from '@/views/ExportChat/ExportChatView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -39,6 +41,16 @@ const router = createRouter({
           path: '/account',
           name: 'account',
           component: AccountView,
+        },
+        {
+          path: '/guide',
+          name: 'guide',
+          component: GuideView,
+        },
+        {
+          path: '/exportchat/:id',
+          name: 'exportchat',
+          component: ExportChatView,
         }
       ]
     },

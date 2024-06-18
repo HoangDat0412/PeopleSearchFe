@@ -56,6 +56,13 @@ const handleSearch = async () => {
   }
 };
 
+const handleShowKeyboard = ()=>{
+  show.showNameKeyboard = false;
+  show.showAddressKeyboard = false;
+  show.showEmailKeyboard = false;
+  show.showLinkFaceBookKeyboard = false
+}
+
 // show input keyboard
 
 import KeyBoardInputName from "@/components/KeyBoardInput/KeyBoardInputName.vue";
@@ -81,115 +88,141 @@ import KeyBoardInputAddress from '@/components/KeyBoardInput/KeyBoardInputAddres
         <v-row dense>
           <v-col cols="12" sm="6">
             <KeyBoardInputName v-if="show.showNameKeyboard" />
-            <v-text-field
-              v-else
-              v-model="inputStore.name"
-              label="Full Name"
+            <div v-else>
+              <div class="text-subtitle-1 text-medium-emphasis">Full Name</div>
+              <v-text-field v-model="inputStore.name" variant="solo" density="compact">
+                <template v-slot:prepend>
+                  <v-icon
+                    :icon="mdiKeyboard"
+                    @click="()=>{
+                      handleShowKeyboard()
+                      show.showNameKeyboard = true
+                    }"
+                    class="me-1"
+                  ></v-icon>
+                </template>
+              </v-text-field>
+            </div>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <KeyBoardInputLinkFacebook v-if="show.showLinkFaceBookKeyboard" />
+            <div  v-else>
+              <div class="text-subtitle-1 text-medium-emphasis">Link Facebook</div>
+              <v-text-field
+             
+              v-model="inputStore.linkfacebook"
+              density="compact"
               variant="solo"
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <v-icon
                   :icon="mdiKeyboard"
-                  @click="show.showNameKeyboard = true"
+                  @click="()=>{
+                      handleShowKeyboard()
+                      show.showLinkFaceBookKeyboard = true
+                    }"
                   class="me-1"
                 ></v-icon>
               </template>
             </v-text-field>
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="inputStore.age"
-              label="Age"
-              variant="solo"
-            ></v-text-field>
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <v-text-field label="IP" variant="solo"></v-text-field>
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6">
             <KeyBoardInputEmail v-if="show.showEmailKeyboard" />
-            <v-text-field
-              v-else
+            <div v-else>
+              <div class="text-subtitle-1 text-medium-emphasis">Email</div>
+              <v-text-field
               v-model="inputStore.email"
-              label="Email"
               variant="solo"
+              density="compact"
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <v-icon
                   :icon="mdiKeyboard"
-                  @click="show.showEmailKeyboard = true"
+                  @click="()=>{
+                      handleShowKeyboard()
+                      show.showEmailKeyboard = true
+                    }"
                   class="me-1"
                 ></v-icon>
               </template>
             </v-text-field>
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="inputStore.cccd"
-              label="CCCD/Passport"
-              variant="solo"
-            ></v-text-field>
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="inputStore.phone"
-              label="Phone"
-              variant="solo"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field label="MST" variant="solo"></v-text-field>
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <KeyBoardInputLinkFacebook v-if="show.showLinkFaceBookKeyboard" />
-            <v-text-field
-              v-else
-              v-model="inputStore.linkfacebook"
-              label="Link Facebook"
-              variant="solo"
-            >
-              <template v-slot:append>
-                <v-icon
-                  :icon="mdiKeyboard"
-                  @click="show.showLinkFaceBookKeyboard = true"
-                  class="me-1"
-                ></v-icon>
-              </template>
-            </v-text-field>
-          </v-col>
-
-          <v-col cols="12" sm="6">
-            <v-select
-              :items="['Male', 'Femail']"
-              v-model="inputStore.gender"
-              label="Gender"
-              variant="solo"
-            ></v-select>
+            </div>
           </v-col>
 
           <v-col cols="12" sm="6">
             <KeyBoardInputAddress v-if="show.showAddressKeyboard" />
-            <v-text-field
-              v-else
-              label="Address"
+            <div  v-else>
+              <div class="text-subtitle-1 text-medium-emphasis">Address</div>
+              <v-text-field
+              density="compact"
               v-model="inputStore.address"
               variant="solo"
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <v-icon
                   :icon="mdiKeyboard"
-                  @click="show.showAddressKeyboard = true"
+                  @click="()=>{
+                      handleShowKeyboard()
+                      show.showAddressKeyboard = true
+                    }"
                   class="me-1"
                 ></v-icon>
               </template>
             </v-text-field>
+            </div>
           </v-col>
+
+          
+          <v-col cols="12" sm="6">
+            <div class="text-subtitle-1 text-medium-emphasis">Age</div>
+            <v-text-field
+              v-model="inputStore.age"
+              variant="solo"
+              density="compact"
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="12" sm="6">
+            <div class="text-subtitle-1 text-medium-emphasis">Internet Protocol</div>
+            <v-text-field variant="solo" density="compact"></v-text-field>
+          </v-col>
+
+          <v-col cols="12" sm="6">
+            <div class="text-subtitle-1 text-medium-emphasis">CCCD/Passport</div>
+            <v-text-field
+              v-model="inputStore.cccd"
+              density="compact"
+              variant="solo"
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="12" sm="6">
+            <div class="text-subtitle-1 text-medium-emphasis">Phone</div>
+            <v-text-field
+              v-model="inputStore.phone"
+              density="compact"
+              variant="solo"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <div class="text-subtitle-1 text-medium-emphasis">MST</div>
+            <v-text-field density="compact" variant="solo"></v-text-field>
+          </v-col>
+
+
+
+          <v-col cols="12" sm="6">
+            <div class="text-subtitle-1 text-medium-emphasis">Gender</div>
+            <v-select
+              :items="['male', 'femail']"
+              v-model="inputStore.gender"
+              density="compact"
+              variant="solo"
+            ></v-select>
+          </v-col>
+
         </v-row>
 
         <small class="text-caption text-medium-emphasis"

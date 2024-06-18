@@ -2,6 +2,7 @@
 // thư viện
 import { ref } from 'vue';
 import { mdiEmailOutline, mdiEyeOff, mdiEye,mdiAccount } from '@mdi/js'
+import banerlogo from "@/assets/img/darkbannerlogo.png"
 const visible = ref(false)
 import { checkNull, ValidateEmail } from '@/validation/validation'
 import { useUserStore } from '@/stores/user'
@@ -52,11 +53,13 @@ const handleRegister = async () => {
 }
 </script>
 <template>
-    <div>
-        <v-img class="mx-auto my-6" max-width="228"
-            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"></v-img>
+    <div style="overflow-y: hidden; height: 100vh;" class="pb-5 login">
+      <v-img class="d-none d-md-block mx-auto mt-0 mt-md-6" max-width="270"
+      :src="banerlogo"></v-img>
+      <v-img class="d-block d-md-none mx-auto mt-0 mt-md-6" max-width="200"
+      :src="banerlogo"></v-img>
 
-        <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+        <v-card class="mx-auto pa-10 pb-6" elevation="8" max-width="448" rounded="lg">
             <div class="text-subtitle-1 text-medium-emphasis">Email</div>
             <v-text-field v-model="email" :error-messages="errorEmail" density="compact" :prepend-inner-icon="mdiEmailOutline" variant="outlined"></v-text-field>
             <div class="text-subtitle-1 text-medium-emphasis">Account</div>
@@ -68,7 +71,7 @@ const handleRegister = async () => {
             <v-text-field v-model="passWord" :error-messages="errorPassword" :append-inner-icon="visible ? mdiEyeOff : mdiEye" :type="visible ? 'text' : 'password'"
                 density="compact" prepend-inner-icon="mdi-lock-outline" variant="outlined"
                 @click:append-inner="visible = !visible"></v-text-field>
-            <v-btn class="mb-8" color="blue" size="large" variant="tonal" block @click="handleRegister">
+            <v-btn class="mb-2" color="blue" size="large" variant="tonal" block @click="handleRegister">
                 Register
             </v-btn>
 
@@ -80,3 +83,14 @@ const handleRegister = async () => {
         </v-card>
     </div>
 </template>
+
+<style scoped>
+.login{
+    background: url('../../assets/img/background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+</style>

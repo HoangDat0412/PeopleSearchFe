@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from "@/stores/user";
-
+import avataruser from "@/assets/img/useravatar.jpg";
 const props = defineProps(["search"]);
 let search = props.search;
 const user = useUserStore();
@@ -11,8 +11,8 @@ const user = useUserStore();
     <div class="me-3">
       <v-avatar color="grey-lighten-1">
         <v-img
-          alt="John"
-          src="https://cdn.vuetifyjs.com/images/john.jpg"
+          alt="User"
+          :src="avataruser"
         ></v-img>
       </v-avatar>
     </div>

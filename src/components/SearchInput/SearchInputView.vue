@@ -1,12 +1,11 @@
 <script setup>
 // khai báo thư viện
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import {
   mdiAttachment,
   mdiFormSelect,
   mdiMicrophone,
   mdiSend,
-  mdiNoteText,
 } from "@mdi/js";
 import "./searchinput.scss";
 import { useShowStore } from "@/stores/show";
@@ -15,7 +14,7 @@ import { notify } from "@kyvg/vue3-notification";
 import { useRoute } from "vue-router";
 import KeyboardModelView from "../KeyboardModel/KeyboardModelView.vue";
 import { useInputStore } from "@/stores/input";
-
+import SelectLanguage from "../SelectLanguage/SelectLanguage.vue";
 // khai báo biến
 const storeInput = useInputStore()
 const search = ref(storeInput.search);
@@ -29,6 +28,9 @@ const language = ref("keyboard")
 const handleChangeKeyBoard = ()=>{
   show.showKeyBoard = true
 }
+watch(language, () => {
+  handleChangeKeyBoard();
+});
 
 const handleSearch = async () => {
   if (search.value.trim() !== "") {
@@ -60,13 +62,17 @@ const handleSearch = async () => {
     <div class="custom-input">
       <v-text-field
         v-model="search"
-        placeholder="Search by full name"
+        placeholder="Search by full name - phone number - passport - email - etc"
         variant="solo"
         density="compact"
         outlined
         dense
         hide-details
-      ></v-text-field>
+      >
+        <template v-slot:prepend>
+        <SelectLanguage/>
+        </template>
+      </v-text-field>
       <div class="actions">
         <v-btn
           size="small"
@@ -76,7 +82,7 @@ const handleSearch = async () => {
           <template v-slot:prepend>
             <v-icon color="primary"></v-icon>
           </template>
-          <span class="d-none d-md-inline">Search Information</span>
+          <span class="d-none d-md-inline">Search People Information</span>
         </v-btn>
         <v-btn
           size="small"
@@ -86,7 +92,7 @@ const handleSearch = async () => {
           <template v-slot:prepend>
             <v-icon color="primary"></v-icon>
           </template>
-          <span class="d-none d-md-inline">Search Image/Video</span>
+          <span class="d-none d-md-inline">Search People Face Image/Video</span>
         </v-btn>
         <v-btn
           size="small"
@@ -96,10 +102,10 @@ const handleSearch = async () => {
           <template v-slot:prepend>
             <v-icon color="primary"></v-icon>
           </template>
-          <span class="d-none d-md-inline">Search Audio</span>
+          <span class="d-none d-md-inline">Search People Void</span>
         </v-btn>
 
-        <v-btn
+        <!-- <v-btn
           size="small"
           :prepend-icon="mdiNoteText"
           @click="show.showNote = !show.showNote"
@@ -108,16 +114,7 @@ const handleSearch = async () => {
             <v-icon color="primary"></v-icon>
           </template>
           <span class="d-none d-md-inline">Edit Note</span>
-        </v-btn>
-
-        <select v-model="language" @change="handleChangeKeyBoard" class="v-btn v-btn--elevated v-theme--light v-btn--density-default v-btn--size-small v-btn--variant-elevated">
-          <option value="keyboard" disabled>Keyboard</option>
-          <option value="English" >English</option>
-          <option value="French" >French</option>
-          <option value="Russian" >Russian</option>
-          <option value="Hindi" >Hindi</option>
-          <option value="Hebrew" >Hebrew</option>
-        </select>
+        </v-btn> -->
 
         <v-progress-circular
           v-if="show.showSpiner"

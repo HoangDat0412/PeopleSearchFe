@@ -40,7 +40,7 @@ const handleSearch = async () => {
 <template>
         <v-dialog
       v-model="show.showKeyBoard"
-      width="auto"
+      width="600px"
     >
       <v-card
      

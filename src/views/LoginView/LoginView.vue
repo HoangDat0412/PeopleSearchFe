@@ -1,10 +1,10 @@
 <script setup>
 // thư viện
 import { ref } from 'vue';
-import { mdiEmailOutline, mdiEyeOff, mdiEye,mdiFacebook,mdiGmail } from '@mdi/js'
+import { mdiEmailOutline, mdiEyeOff, mdiEye } from '@mdi/js'
 import { useUserStore } from '@/stores/user';
 import { checkNull } from '@/validation/validation';
-
+import banerlogo from "@/assets/img/darkbannerlogo.png"
 // khai báo biến
 const visible = ref(false)
 const user = useUserStore()
@@ -24,9 +24,7 @@ const handleLogin = async () => {
   } else {
     errUserName.value = ''
   }
-
   const flag = checkNull(passWord.value) && checkNull(username.value)
-
   if (flag) {
     await user.login({
       username: username.value,
@@ -36,9 +34,9 @@ const handleLogin = async () => {
 }
 </script>
 <template>
-    <div>
-        <v-img class="mx-auto my-6" max-width="228"
-            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"></v-img>
+    <div style="overflow-y: hidden; height: 100vh;" class="pb-5 login">
+        <v-img class="mx-auto mt-6" max-width="270"
+            :src="banerlogo"></v-img>
 
         <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
             <div class="text-subtitle-1 text-medium-emphasis">Account</div>
@@ -56,7 +54,7 @@ const handleLogin = async () => {
             <v-text-field v-model="passWord" :error-messages="errorPassword" :append-inner-icon="visible ? mdiEyeOff : mdiEye" :type="visible ? 'text' : 'password'"
                 density="compact" prepend-inner-icon="mdi-lock-outline" variant="outlined"
                 @click:append-inner="visible = !visible"></v-text-field>
-
+<!-- 
             <v-card class="mb-12" color="surface-variant" variant="tonal">
                 <v-card-text class="text-medium-emphasis text-caption d-flex flex-column justify-center">
                     <span class="text-subtitle-2 text-center">Login With</span>
@@ -72,9 +70,9 @@ const handleLogin = async () => {
                         </div>
                     </div>
                 </v-card-text>
-            </v-card>
+            </v-card> -->
 
-            <v-btn class="mb-8" color="blue" size="large" variant="tonal" block @click="handleLogin">
+            <v-btn class="mb-2" color="blue" size="large" variant="tonal" block @click="handleLogin">
                 Log In
             </v-btn>
 
@@ -86,3 +84,12 @@ const handleLogin = async () => {
         </v-card>
     </div>
 </template>
+
+<style scoped>
+.login{
+    background: url('../../assets/img/background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>

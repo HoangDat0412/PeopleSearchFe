@@ -1,15 +1,15 @@
 .keyboard-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    
   }
   
   .simple-keyboard {
     margin-top: 20px;
     max-width: 600px;
     width: 100%;
+    color: black;
   }
-  
   .v-text-field {
     width: 100%;
     max-width: 600px;

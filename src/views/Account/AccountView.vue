@@ -9,8 +9,19 @@ import { useUserStore } from "@/stores/user";
 const user = useUserStore();
 const name = ref("");
 const oldPassword = ref("");
+const erroldpassword = ref("")
 const newPassword = ref("");
+const errnewpassword = ref("")
 const repeatPassword = ref("");
+const errrepeatpassword = ref("")
+
+const mfa = ref(false);
+const theme = ref(user.theme);
+const themes = ['light', 'dark'];
+
+const handleChangeTheme = ()=>{
+  user.theme = theme.value
+}
 
 // function
 const handleUpdateUserName = async () => {
@@ -45,85 +56,74 @@ onBeforeMount(async () => {
   await user.getUserInformation();
   name.value = user.userInformation?.current_user_name;
 });
+
 </script>
 
 <template>
-  <v-container fluid style="height: 100%; overflow-y: auto">
-    <v-row>
-      <v-col cols="12">
-        <h2 class="title mb-3">ACCOUNT</h2>
-        <v-divider></v-divider>
+  <v-container class="pa-10" fluid style="height: 100%; overflow-y: auto">
+    <v-card class="pa-5">
+      <v-card-title>Account Settings</v-card-title>
+      <v-card-text>
+        <v-form class="mt-5">
+          <div class="text-subtitle-1 text-medium-emphasis">Theme</div>
+          <v-select
+            v-model="theme"
+            :items="themes"
+            density="compact"
+            variant="solo"
+          ></v-select>
+          <v-btn type="button" size="small" color="primary" @click="handleChangeTheme">Save Changes</v-btn>
+        </v-form>
 
         <v-form class="mt-5">
-          <div class="text-subtitle-1 text-medium-emphasis">Account Name</div>
+          <div class="text-subtitle-1 text-medium-emphasis">Current Password</div>
+          <v-text-field
+            v-model="oldPassword"
+            type="password"
+            required
+                        density="compact"
+            variant="solo"
+          ></v-text-field>
+          <div class="text-subtitle-1 text-medium-emphasis">New Password</div>
+          <v-text-field
+            v-model="newPassword"
+            type="password"
+            required
+                        density="compact"
+            variant="solo"
+          ></v-text-field>
+          <div class="text-subtitle-1 text-medium-emphasis">Repeat Password</div>
+          <v-text-field
+            v-model="newPassword"
+            type="password"
+            required
+                        density="compact"
+            variant="solo"
+          ></v-text-field>
+          <v-btn type="submit" size="small" color="primary">Change Password</v-btn>
+        </v-form>
+
+        <v-form class="mt-5">
+          <div class="text-subtitle-1 text-medium-emphasis">Username</div>
           <v-text-field
             v-model="name"
+            required
+                                    density="compact"
             variant="solo"
-            density="compact"
-            outlined
           ></v-text-field>
-          <v-btn
-            type="button"
-            @click="() => handleUpdateUserName()"
-            color="primary"
-            class=""
-          >
-            Update
-          </v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" class="mt-5">
-        <h2 class="title mb-3">CHANGE PASSWORD</h2>
-        <v-divider></v-divider>
 
-        <v-form @submit.prevent="changePassword" class="mt-5">
-          <v-text-field
-            variant="solo"
-            v-model="oldPassword"
-            label="Old password"
-            type="password"
-            outlined
-          ></v-text-field>
-          <v-text-field
-            variant="solo"
-            v-model="newPassword"
-            label="New password"
-            type="password"
-            outlined
-          ></v-text-field>
-          <v-text-field
-            variant="solo"
-            v-model="repeatPassword"
-            label="Repeat new password"
-            type="password"
-            outlined
-          ></v-text-field>
-          <v-btn type="submit" color="primary" class="">
-            Change Password
-          </v-btn>
+          <v-btn type="button" @click="handleUpdateUserName()" size="small" color="primary">Change UserName</v-btn>
         </v-form>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" class="mt-5">
-        <h2 class="title mb-3">Multi-factor authentication</h2>
-        <v-divider></v-divider>
+
 
         <v-form class="mt-5">
-          <v-select
-          variant="solo"
-            :items="[
-              { title: 'On', value: true },
-              { title: 'Off', value: false },
-            ]"
-            density="compact"
-          ></v-select>
-          <v-btn type="submit" color="primary" class=""> Save </v-btn>
+          <v-switch
+            v-model="mfa"
+            label="Multi-Factor Authentication"
+          ></v-switch>
         </v-form>
-      </v-col>
-    </v-row>
+      </v-card-text>
+    </v-card>
   </v-container>
 
   <FooterView />

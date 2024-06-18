@@ -4,12 +4,15 @@ import cccd from "@/assets/img/cccd.png";
 import AlbumImageView from "@/components/AlbumImage/AlbumImageView.vue";
 import AlbumVideoView from "@/components/AlbumVideo/AlbumVideoView.vue";
 import MapView from "@/components/Map/MapView.vue";
-
+import ModelAlbumImageView from "@/components/ModelAlbumImage/ModelAlbumImageView.vue"
+import ModelAlbumVideoView from "@/components/ModelAlbumVideo/ModelAlbumVideoView.vue"
+import { useShowStore } from "@/stores/show";
 
 // khai báo biến
-const props = defineProps(['item', 'resultlength'])
-const item = props?.item
-const resultlength = props?.resultlength
+const show = useShowStore()
+const props = defineProps(["item", "resultlength"]);
+const item = props?.item;
+const resultlength = props?.resultlength;
 
 const exportToPDF = () => {
   html2pdf(document.getElementById("element-to-print"), {
@@ -31,8 +34,8 @@ const exportToPDF = () => {
       class="mx-auto cardresultsearch mb-2"
     >
       <v-card-item>
-        <v-row id="element-to-print">
-          <v-col cols="12" md="6">
+        <v-row id="element-to-print" class="mt-5">
+          <v-col cols="12" md="6" >
             <div class="">
               <div class="text-subtitle-2" style="font-weight: 600">
                 CCCD/Passport
@@ -42,7 +45,6 @@ const exportToPDF = () => {
                 Search Result: {{ resultlength }}
               </div>
             </div>
-           
           </v-col>
           <v-col cols="12" md="6">
             <v-card class="">
@@ -60,56 +62,60 @@ const exportToPDF = () => {
                 <p class="mb-1">Bio: {{ item?.biography }}</p>
               </v-card-item>
             </v-card>
-            
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
             <div class="text-subtitle-2 mb-1 mt-5" style="font-weight: 600">
-                Album Audio
-              </div>
-              <v-row>
-                <v-col
-                  v-for="n in 6"
-                  :key="n"
-                  class="d-flex child-flex"
-                  cols="4"
-                >
-                  <audio controls loop>
-                    <source
-                      src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/9473/new_year_dubstep_minimix.ogg"
-                      type="audio/ogg"
-                    />
-                    Your browser dose not Support the audio Tag
-                  </audio>
-                </v-col>
-              </v-row>
+              Album Audio
+            </div>
+            <v-row>
+              <v-col v-for="n in 6" :key="n" class="d-flex child-flex" cols="4">
+                <audio controls loop>
+                  <source
+                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/9473/new_year_dubstep_minimix.ogg"
+                    type="audio/ogg"
+                  />
+                  Your browser dose not Support the audio Tag
+                </audio>
+              </v-col>
+            </v-row>
           </v-col>
 
           <v-col cols="12" md="6">
             <div class="text-subtitle-2 mb-1 mt-5" style="font-weight: 600">
-                Lastest Location Found
-              </div>
-              <MapView class="mt-4" />
+              Lastest Location Found
+            </div>
+            <MapView class="mt-4" />
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
-            <div class="text-subtitle-2" style="font-weight: 600">
-              Album Images
+            <div class="d-flex align-center justify-space-between">
+              <div class="text-subtitle-2" style="font-weight: 600">
+                Album Simple Images
+              </div>
+
+              <v-btn density="compact" @click="show.showAlbumImage = true" variant="tonal">View All</v-btn>
             </div>
+            <ModelAlbumImageView/>
             <AlbumImageView />
           </v-col>
 
           <v-col cols="12" md="6">
-            <div class="text-subtitle-2" style="font-weight: 600">
-              Album Video
+            <div class="d-flex align-center justify-space-between">
+              <div class="text-subtitle-2" style="font-weight: 600">
+                Album Simple Videos
+              </div>
+
+              <v-btn density="compact" @click="show.showAlbumImage = true" variant="tonal">View All</v-btn>
             </div>
+            <ModelAlbumVideoView/>
             <AlbumVideoView />
           </v-col>
 
           <v-col cols="12" md="6" style="padding-bottom: 80px">
-            <v-btn @click="exportToPDF">DownLoad PDF</v-btn>
+            <v-btn @click="exportToPDF">Export PDF</v-btn>
           </v-col>
         </v-row>
       </v-card-item>

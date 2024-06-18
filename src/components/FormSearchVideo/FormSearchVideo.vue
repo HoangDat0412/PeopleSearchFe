@@ -5,7 +5,6 @@ import { ref } from 'vue';
 
 // khai báo biến
 const show = useShowStore();
-const message = ref('')
 const fileUrl = ref(null)
 const fileType = ref('')
 
@@ -40,11 +39,7 @@ const previewFile = (event) => {
                     </span> Search By Image/Video</p>
 
                 <v-row dense>
-                    <v-col cols="12">
-                        <label class="ms-1 mb-3" style="font-size: 14px;">Message</label>
-                        <v-text-field v-model="message" density="compact" class="mt-1" variant="solo"
-                            required></v-text-field>
-                    </v-col>
+
 
                     <v-col cols="12">
                         <label class="ms-1 mb-3" style="font-size: 14px;">File Image/Video</label>

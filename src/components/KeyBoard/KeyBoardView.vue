@@ -156,7 +156,7 @@ watch(currentLanguage, () => {
       :value="storeInput.search"
       class="v-field__input"
       @input="(e) => storeInput.ChangeSearch(e.target.value)"
-      placeholder="Full Name"
+      placeholder="Search by full name - phone number - passport - email - etc"
     />
     <div class="simple-keyboard"></div>
   </div>
@@ -173,6 +173,7 @@ watch(currentLanguage, () => {
   margin-top: 20px;
   max-width: 600px;
   width: 100%;
+  color: black;
 }
 
 input {

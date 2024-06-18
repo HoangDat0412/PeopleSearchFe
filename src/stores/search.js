@@ -21,7 +21,7 @@ export const useSearchStore = defineStore('search', {
         if (result.status === 200) {
           let searchresult = result.data
 
-          if (result.data.length === 0 || result.data.length > 10) {
+          if (result.data.length === 0 || result.data.length > 100) {
             searchresult = []
           }
           const conversation = {
@@ -80,13 +80,12 @@ export const useSearchStore = defineStore('search', {
         const result = await service.post(`API_Web/MultipleSearch/`, {
           data: data
         })
-        this.searchResult = result.data
+        this.searchResult = result.data.results
         if (result.status === 200) {
-          let searchresult = result.data
-          if (result.data.length === 0 || result.data.length > 10) {
+          let searchresult = result.data.results
+          if (result.data.length === 0 || result.data.results.length > 100) {
             searchresult = []
           }
-          console.log("data",data);
           const conversation = {
             content: {
               search: data,
@@ -130,6 +129,16 @@ export const useSearchStore = defineStore('search', {
           this.listChat = [...result.data].reverse()
           const listHighlight = this.listChat.filter((item) => item.higlighted === 1)
           this.listHighlight = listHighlight
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async SearchChat(name) {
+      try {
+        const result = await service.get(`API/ChatGetCreate/?name=${name}`)
+        if (result.status === 200) {
+          this.listChat = [...result.data].reverse()
         }
       } catch (error) {
         console.log(error)
@@ -195,7 +204,6 @@ export const useSearchStore = defineStore('search', {
         const result = await service.get(`API/ConversationGetCreate/?chat_id=${id}`)
         if (result.status === 200) {
           this.chatDetail = result.data
-          console.log('chat detail', this.chatDetail)
         }
       } catch (error) {
         console.log(error)

@@ -2,8 +2,9 @@ import router from "@/router";
 import { service } from "@/service/baseService";
 import { defineStore } from "pinia";
 import Cookies from "js-cookie";
-import { TOKEN, csrftoken } from "@/utils/config";
+import { DOMAIN, REFRESHTOKEN, TOKEN } from "@/utils/config";
 import { notify } from "@kyvg/vue3-notification";
+import axios from "axios";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -13,12 +14,12 @@ export const useUserStore = defineStore("user", {
     newuserlist: [],
     responseRegister: null,
     chechOutResult: null,
-
     updateSuccess: true,
-
     userUpdate: {},
     logoutStatus: "",
     userUpdateResult: true,
+    theme: "light",
+    loginstatus: false,
   }),
   getters: {},
   actions: {
@@ -47,7 +48,8 @@ export const useUserStore = defineStore("user", {
           });
         } else if (error?.response?.status === 400) {
           notify({
-            title:"Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.",
+            title:
+              "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.",
             type: "error",
           });
         } else {
@@ -62,31 +64,39 @@ export const useUserStore = defineStore("user", {
     },
     async login(data) {
       try {
-        const result = await service.login(
-          `AccountManagement/api/login/`,
-          data
-        );
+        const result = await service.login(`AccountManagement/login/`, data);
         if (result?.status === 200) {
-          Cookies.set(TOKEN, result.data.token, { expires: 30 });
-          Cookies.set(csrftoken, result.data.csrf_token, { expires: 30 });
-          router.push({ path: "/" });
+          Cookies.set(TOKEN, result.data.access);
+          Cookies.set(REFRESHTOKEN, result.data.refresh);
+          this.loginstatus = true
+          const user = await axios({
+            method:"GET",
+            url:`${DOMAIN}API/CurrentUserId/`,
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${result.data.access}`,
+            },
+          });
+          if (user?.status === 200) {
+            this.userInformation = { ...user.data };
+          }
           notify({
-            type: 'success',
-            title: `Welcome back to People Search`
-          })
+            type: "success",
+            title: `Welcome back to People Search`,
+          });
+          router.push({ path: "/" });
         }
       } catch (error) {
-        console.log(error);
-        if(error.response.status === 400){
+        if (error.response.status === 400) {
           notify({
-            type: 'error',
-            title: `Wrong account or password`
-          })
-        }else{
+            type: "error",
+            title: `Wrong account or password`,
+          });
+        } else {
           notify({
-            type: 'error',
-            title: `${error.message}`
-          })
+            type: "error",
+            title: `${error.message}`,
+          });
         }
       }
     },
@@ -95,7 +105,6 @@ export const useUserStore = defineStore("user", {
         const result = await service.get(`API/CurrentUserId/`);
         if (result?.status === 200) {
           this.userInformation = { ...result.data };
-          console.log(this.userInformation);
         }
       } catch (error) {
         this.userInformation = false;
@@ -104,6 +113,7 @@ export const useUserStore = defineStore("user", {
     async logout() {
       try {
         Cookies.remove(TOKEN);
+        Cookies.remove(REFRESHTOKEN);
         notify({
           title: "logout Account Success",
           type: "success",
@@ -131,18 +141,43 @@ export const useUserStore = defineStore("user", {
           return this.getUserInformation();
         }
       } catch (error) {
-        if(error.response.status === 400){
+        if (error.response.status === 400) {
           notify({
             title: `user name already exist`,
             type: "error",
           });
-        }else{
+        } else {
           notify({
             title: `update user name false `,
             type: "error",
           });
         }
         console.log(error);
+      }
+    },
+    async resetPassword(data) {
+      try {
+        const result = await service.post(
+          `AccountManagement/confirm-email/`,
+          data
+        );
+        if (result.status === 200) {
+          notify({
+            type: "success",
+            title: "The mail to reset password",
+          });
+        } else {
+          notify({
+            type: "error",
+            title: "Not found account",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        notify({
+          type: "error",
+          title: "Not found account",
+        });
       }
     },
   },

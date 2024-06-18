@@ -59,17 +59,20 @@ const show = useShowStore()
 <template>
 
   <div class="keyboard-container">
-    <v-text-field label="Link FaceBook" v-model="storeInput.linkfacebook" variant="solo">
-      <template v-slot:append>
+    <div class="text-subtitle-1 text-medium-emphasis">Link Facebook</div>
+    <v-text-field density="compact" v-model="storeInput.linkfacebook" variant="solo">
+      <template v-slot:prepend>
         <v-icon :icon="mdiKeyboard" @click="show.showLinkFaceBookKeyboard = false" class="me-1"></v-icon>
-        <v-select
+        <v-autocomplete
           v-model="currentLanguage"
           :items="languages"
           dense
+          variant="solo"
+          density="compact"
           hide-details
           outlined
           class="language-select"
-        ></v-select>
+        ></v-autocomplete>
       </template>
     </v-text-field>
     <div  class="simple-keyboard"></div>
